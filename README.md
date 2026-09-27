@@ -4,7 +4,7 @@ Clients, referral courses, sessions, notes, outcomes and invoices in a database 
 
 | Do it yourself | We customise it | We run it for you |
 |---|---|---|
-| Free, MIT. [Quick start](#quick-start) | Your fields, rules, Zanda records and a web front end if you want one. [Discuss your version](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=zanda) | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. [See the offer](https://enterprisedna.co/omni/instead-of/zanda) |
+| Free, MIT. [Quick start](#quick-start) | Your fields, rules, Zanda records and a web front end if you want one. [Discuss your version](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=zanda) | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. [See the offer](https://enterprisedna.co/omni/instead-of/zanda?utm_source=github&utm_medium=readme&utm_campaign=zanda) |
 
 ## What this does
 
