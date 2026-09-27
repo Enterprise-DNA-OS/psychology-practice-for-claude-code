@@ -1,13 +1,13 @@
 ---
-description: Record checks with cited sources
+description: Individual Better Access use by year
 ---
 
-# Record checks with cited sources
+# Individual Better Access use by year
 
 Read CLAUDE.md first. Resolve names before changes; list ambiguous candidates and ask the operator. Use dates and values supplied for this task, never the illustrative values below.
 
 ```bash
-node scripts/practice.mjs compliance
+node scripts/practice.mjs annual-allowance
 ```
 
 Read the result, then state the decision or outstanding field in plain words. Add `--json` for structured reads. For clinical notes use only the clinician's supplied words. Drafts stay in `drafts/`; do not send. Read `docs/compliance.md` for funding and privacy limits.

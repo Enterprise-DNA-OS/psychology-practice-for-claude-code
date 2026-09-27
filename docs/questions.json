@@ -1,0 +1,42 @@
+[
+  [
+    "Which referral courses have no room left once booked sessions are included?",
+    "referrals-due"
+  ],
+  [
+    "Which completed sessions still lack a finalised note, and who owns them?",
+    "notes-due"
+  ],
+  [
+    "Which completed or interrupted courses still need a GP report?",
+    "reports-due"
+  ],
+  [
+    "How many individual funded visits remain after outside-provider use?",
+    "annual-allowance"
+  ],
+  [
+    "Which overdue balances belong to a client and which to an EAP payer?",
+    "debtors"
+  ],
+  [
+    "Which latest outcome records are past their review date?",
+    "outcomes"
+  ],
+  [
+    "Which clients attended but have no next appointment booked?",
+    "rebooking"
+  ],
+  [
+    "Which clients have missed sessions, and when was the last one?",
+    "no-shows"
+  ],
+  [
+    "Which referrers have courses waiting for a written report?",
+    "referrers"
+  ],
+  [
+    "How much was billed, received and remains owing for each payer and currency?",
+    "takings"
+  ]
+]

@@ -20,14 +20,15 @@ export function esc(v) {
 export function table(rows, columns = null) {
   if (!rows || !rows.length) return '<p class="empty">Nothing here.</p>';
   const cols = columns || Object.keys(rows[0]);
-  const head = cols.map((c) => `<th>${esc(c.replace(/_/g, ' '))}</th>`).join('');
-  const body = rows.map((r) => `<tr>${cols.map((c) => `<td>${esc(fmt(r[c]))}</td>`).join('')}</tr>`).join('');
+  const head = cols.map((c) => `<th>${esc(c.replace(/_cents$/, '').replace(/_/g, ' '))}</th>`).join('');
+  const body = rows.map((r) => `<tr>${cols.map((c) => `<td>${esc(fmt(r[c], c, r))}</td>`).join('')}</tr>`).join('');
   return `<div class="table-scroll"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 
-function fmt(v) {
+function fmt(v, key, row) {
   if (v === null || v === undefined) return '';
-  if (v instanceof Date) return v.toISOString().slice(0, 10);
+  if (v instanceof Date) return v.toISOString().replace('T', ' ').replace('.000Z', ' UTC');
+  if (key.endsWith('_cents')) return `${row.currency || ''} ${(Number(v) / 100).toFixed(2)}`.trim();
   if (typeof v === 'number' && !Number.isInteger(v)) return v.toFixed(2);
   return v;
 }

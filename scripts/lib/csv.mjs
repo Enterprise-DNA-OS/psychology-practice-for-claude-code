@@ -1,71 +1,30 @@
-// Small CSV parser: quoted fields, doubled quotes, newlines inside quotes, CRLF, BOM.
-// Returns an array of objects keyed by the header row.
-
-export function parseCsv(text) {
-  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
-  const rows = [];
-  let row = [];
-  let field = '';
-  let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (inQuotes) {
-      if (ch === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += ch;
-      }
-      continue;
-    }
-    if (ch === '"') {
-      inQuotes = true;
-    } else if (ch === ',') {
-      row.push(field);
-      field = '';
-    } else if (ch === '\n' || ch === '\r') {
-      if (ch === '\r' && text[i + 1] === '\n') i++;
-      row.push(field);
-      field = '';
-      rows.push(row);
-      row = [];
-    } else {
-      field += ch;
-    }
-  }
-  if (field.length || row.length) {
-    row.push(field);
-    rows.push(row);
-  }
-  const nonEmpty = rows.filter((r) => r.some((v) => v.trim() !== ''));
-  if (!nonEmpty.length) return [];
-  const header = nonEmpty[0].map((h) => h.trim());
-  return nonEmpty.slice(1).map((r) => {
-    const obj = {};
-    header.forEach((h, idx) => {
-      obj[h] = (r[idx] ?? '').trim();
-    });
-    return obj;
-  });
+// RFC-style CSV: BOM, CRLF, embedded newlines and doubled quotes.
+// Preserve field text; reject malformed or duplicate headers and uneven rows.
+export function parseCsv(input) {
+ const text=String(input).replace(/^\uFEFF/,'');
+ const rows=[];let row=[],field='',state='plain';
+ const pushField=()=>{row.push(field);field='';state='plain';};
+ const pushRow=()=>{pushField();rows.push(row);row=[];};
+ for(let i=0;i<text.length;i++){
+  const c=text[i];
+  if(state==='quoted'){
+   if(c==='"'){if(text[i+1]==='"'){field+='"';i++;}else state='closed';}
+   else field+=c;
+  }else if(c===',')pushField();
+  else if(c==='\r'||c==='\n'){if(c==='\r'&&text[i+1]==='\n')i++;pushRow();}
+  else if(c==='"'&&state==='plain'&&field==='')state='quoted';
+  else if(state==='closed'||c==='"')throw Error('Malformed CSV: unexpected character outside quoted field');
+  else field+=c;
+ }
+ if(state==='quoted')throw Error('Malformed CSV: unclosed quoted field');
+ if(field!==''||row.length||state==='closed')pushRow();
+ const nonempty=rows.filter(r=>r.some(v=>v.trim()!==''));if(!nonempty.length)return [];
+ const header=nonempty.shift().map(h=>h.trim());
+ if(header.some(h=>!h)||new Set(header.map(h=>h.toLowerCase())).size!==header.length)throw Error('CSV requires unique, nonempty column names');
+ return nonempty.map((r,i)=>{if(r.length!==header.length)throw Error(`CSV row ${i+2}: expected ${header.length} fields, found ${r.length}`);return Object.fromEntries(header.map((h,j)=>[h,r[j]]));});
 }
-
-// Case-insensitive column lookup with fallbacks: pick(row, 'Client', 'Client Name').
-export function pick(row, ...names) {
-  const keys = Object.keys(row);
-  for (const name of names) {
-    const key = keys.find((k) => k.toLowerCase() === name.toLowerCase());
-    if (key && row[key] !== '') return row[key];
-  }
-  return '';
+export function pick(row,...names){
+ for(const name of names){const key=Object.keys(row).find(k=>k.toLowerCase()===name.toLowerCase());if(key!==undefined&&row[key]!=='')return row[key];}
+ return '';
 }
-
-// Harvest writes "Yes" / "No" in its boolean columns.
-export function yesNo(v, dflt = false) {
-  const s = String(v ?? '').trim().toLowerCase();
-  if (!s) return dflt;
-  return s === 'yes' || s === 'true' || s === 'y' || s === '1';
-}
+export function yesNo(v,dflt=false){const s=String(v??'').trim().toLowerCase();return s?['yes','true','y','1'].includes(s):dflt;}

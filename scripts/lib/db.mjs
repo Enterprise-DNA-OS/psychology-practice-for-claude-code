@@ -74,7 +74,7 @@ export async function getDb() {
   const dir = dataDir();
   mkdirSync(dir, { recursive: true }); // PGlite does not create parent folders
   const { PGlite } = await import('@electric-sql/pglite');
-  const db = new PGlite(dir);
+  const db = new PGlite(dir, { parsers: { 1082: (value) => value } });
   await db.waitReady;
   return {
     mode: 'pglite',

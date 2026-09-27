@@ -1,13 +1,30 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Psychology Practice for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Psychology practice week",
+    "subtitle": "Read-only administration. Fictional data when seeded.",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select * from v_attention order by kind,client"
+      },
+      {
+        "title": "Next seven days",
+        "sql": "select client,practitioner,starts_at,status from v_diary where starts_at>=current_date and starts_at<current_date+7 order by starts_at"
+      },
+      {
+        "title": "Referral courses",
+        "sql": "select name,client,funder,remaining from v_referrals where not closed order by remaining"
+      }
+    ]
+  },
+  {
+    "name": "money",
+    "title": "Practice receivables",
+    "sections": [
+      {
+        "title": "Outstanding by currency",
+        "sql": "select name,client,payer,currency,balance_cents,days_overdue from v_debtors where balance_cents>0 order by days_overdue desc"
       }
     ]
   }

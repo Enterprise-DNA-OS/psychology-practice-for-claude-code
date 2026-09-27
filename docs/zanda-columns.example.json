@@ -1,0 +1,55 @@
+{
+  "id": "ClientID",
+  "first": "FirstName",
+  "last": "LastName",
+  "email": "Email",
+  "dob": "DateOfBirth",
+  "files": {
+    "Client Appointments.csv": {
+      "entity": "sessions",
+      "columns": {
+        "id": "AppointmentID",
+        "client_id": "ClientID",
+        "at": "StartTime",
+        "practitioner": "Practitioner",
+        "status": "Status",
+        "minutes": "Duration",
+        "fee_cents": "FeeCents"
+      },
+      "defaults": {
+        "currency": "AUD"
+      },
+      "statuses": {
+        "Confirmed": "booked",
+        "Completed": "completed",
+        "Cancelled": "cancelled",
+        "Did Not Attend": "dna"
+      },
+      "practitioners": {
+        "EXPORTED PRACTITIONER NAME": "CREATE AND ENTER MATCHING PRACTITIONER NAME"
+      }
+    },
+    "Invoices.csv": {
+      "entity": "invoices",
+      "columns": {
+        "id": "InvoiceID",
+        "client_id": "ClientID",
+        "payer": "Payer",
+        "amount_cents": "AmountCents",
+        "due": "DueDate"
+      },
+      "defaults": {
+        "currency": "AUD"
+      }
+    },
+    "Payments.csv": {
+      "entity": "payments",
+      "columns": {
+        "id": "PaymentID",
+        "invoice_id": "InvoiceID",
+        "amount_cents": "AmountCents",
+        "date": "PaymentDate"
+      }
+    }
+  }
+}
